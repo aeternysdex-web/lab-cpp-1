@@ -41,7 +41,7 @@ const Book* findBook(const vector<Branch>& branches, int id, int& branchIndex) {
 }
 
 void showBranches(const vector<Branch>& branches) {
-    for (const Branch& branch : branches) {     // "для каждого филиала из списка"
+    for (const Branch& branch : branches) {     
         branch.printCatalog();
     }
 }
@@ -105,13 +105,10 @@ void printMenu() {
 }
 
 int main() {
-    // Создаём два филиала.
-    // emplace_back("Филиал №1", 5) — создать Branch прямо в списке (Sonar просит его вместо push_back).
     vector<Branch> branches;
     branches.emplace_back("Филиал №1", 5);
     branches.emplace_back("Филиал №2", 5);
 
-    // Тестовые книги. nextId — id, который получит следующая книга.
     int nextId = 1;
     branches[0].addBook(Book(nextId, "Война и мир", "Л.Н. Толстой"));
     nextId++;
@@ -121,10 +118,9 @@ int main() {
     nextId++;
     cout << "Загружены тестовые данные: 2 филиала.\n";
 
-    // Главный цикл: показываем меню, пока не выберут 0
     int choice;
     do {
-        printMenu();
+        printMenu()
         choice = readInt("Выберите пункт меню: ");
         switch (choice) {
         case 1:
