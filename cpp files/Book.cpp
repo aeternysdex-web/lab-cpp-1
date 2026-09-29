@@ -1,32 +1,37 @@
 #include "Book.h"
 #include <iostream>
 
-using namespace std;
+using namespace std;    // в .cpp это разрешено, поэтому можно писать просто string
 
-Book::Book(int id, string title, string author) {
-    this->id = id;
-    this->title = title;
-    this->author = author;
+// Book::Book — "конструктор класса Book".
+// После двоеточия — список инициализации: поле(значение).
+// Например, id(bookId) значит: в поле id положить значение параметра bookId.
+// Это то же самое, что this->id = bookId; в теле, только правильнее для Sonar.
+Book::Book(int bookId, const string& bookTitle, const string& bookAuthor)
+    : id(bookId), title(bookTitle), author(bookAuthor) {
 }
 
-int Book::getId() {
+// Book::getId — "метод getId класса Book". Просто возвращает поле.
+int Book::getId() const {
     return id;
 }
 
-string Book::getTitle() {
+string Book::getTitle() const {
     return title;
 }
 
-string Book::getAuthor() {
+string Book::getAuthor() const {
     return author;
 }
 
-void Book::printInfo() {
+// Полная информация о книге
+void Book::printInfo() const {
     cout << "ID: " << id << "\n";
     cout << "Название: " << title << "\n";
     cout << "Автор: " << author << "\n";
 }
 
-void Book::printShort() {
+// Короткая строка для списка
+void Book::printShort() const {
     cout << "  ID " << id << ": \"" << title << "\", " << author << "\n";
 }
