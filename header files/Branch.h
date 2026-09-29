@@ -2,28 +2,36 @@
 
 #include <string>
 #include <vector>
-#include "Book.h"     
+#include "Book.h"       // филиал хранит книги, поэтому подключаем Book
 
-using namespace std;
-
+// Класс Branch — один филиал библиотеки.
+// Хранит название, вместимость и список книг (каталог).
 class Branch {
 private:
-    string name;
-    int capacity;           
-    vector<Book> catalog;  
+    std::string name;
+    int capacity;               // максимум книг в филиале
+    std::vector<Book> catalog;  // vector — список, в котором лежат объекты Book
 
 public:
-    Branch(string name, int capacity);
+    Branch(const std::string& branchName, int branchCapacity);
 
-    bool addBook(Book book);     
-    bool removeBookById(int id);   
-    Book* findBookById(int id);    
-    bool isFull();
+    // Работа с книгами
+    bool addBook(const Book& book);     // false, если филиал переполнен
+    bool removeBookById(int id);        // true, если книгу нашли и удалили
 
-    string getName();
-    int getCapacity();
-    int getBooksCount();
+    // const Book* — "указатель на книгу, которую нельзя менять".
+    // Указатель — это адрес книги внутри каталога.
+    // Если книги с таким id нет — вернёт nullptr ("ничего").
+    const Book* findBookById(int id) const;
 
-    void printCatalog();    
-    void printShort();      
+    bool isFull() const;                // true, если книг уже столько же, сколько вместимость
+
+    // Методы, которые возвращают значения полей
+    std::string getName() const;
+    int getCapacity() const;
+    int getBooksCount() const;
+
+    // Вывод на экран
+    void printCatalog() const;  // название филиала и все его книги
+    void printShort() const;    // одна строка про филиал
 };
