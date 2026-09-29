@@ -6,17 +6,14 @@
 
 using namespace std;
 
-// Ввод целого числа с подсказкой.
-// const string& — строку не копируем и не меняем (так требует Sonar).
 int readInt(const string& prompt) {
     cout << prompt;
     int number;
     cin >> number;
-    cin.ignore(1000, '\n');     // убираем из ввода Enter, чтобы он не мешал следующему getline
+    cin.ignore(1000, '\n');     
     return number;
 }
 
-// Ввод целой строки (с пробелами) с подсказкой
 string readLine(const string& prompt) {
     cout << prompt;
     string line;
@@ -24,8 +21,6 @@ string readLine(const string& prompt) {
     return line;
 }
 
-// Показать пронумерованный список филиалов.
-// const vector<Branch>& — "работаем с самим списком (не с копией) и не меняем его".
 void printBranches(const vector<Branch>& branches) {
     for (size_t i = 0; i < branches.size(); ++i) {
         cout << i + 1 << ". ";
@@ -33,30 +28,24 @@ void printBranches(const vector<Branch>& branches) {
     }
 }
 
-// Найти книгу по id во всех филиалах.
-// Возвращает указатель на книгу (или nullptr, если не нашли).
-// Через branchIndex (int& — тоже "работаем с оригиналом") возвращает номер филиала,
-// где лежит книга (или -1).
 const Book* findBook(const vector<Branch>& branches, int id, int& branchIndex) {
     for (size_t i = 0; i < branches.size(); ++i) {
         const Book* book = branches[i].findBookById(id);
-        if (book != nullptr) {                  // нашли
+        if (book != nullptr) {                 
             branchIndex = static_cast<int>(i);
             return book;
         }
     }
-    branchIndex = -1;                           // не нашли
+    branchIndex = -1;                           
     return nullptr;
 }
 
-// Показать все филиалы и книги в них
 void showBranches(const vector<Branch>& branches) {
     for (const Branch& branch : branches) {     // "для каждого филиала из списка"
         branch.printCatalog();
     }
 }
 
-// Показать подробную информацию о книге
 void showBookInfo(const vector<Branch>& branches) {
     showBranches(branches);
     int id = readInt("Введите ID книги: ");
@@ -66,11 +55,9 @@ void showBookInfo(const vector<Branch>& branches) {
         cout << "Книга с таким ID не найдена.\n";
         return;
     }
-    book->printInfo();      // -> используется, когда работаем через указатель (вместо точки)
+    book->printInfo();      
 }
 
-// Добавить книгу в выбранный филиал.
-// Здесь vector<Branch>& без const, потому что мы список изменяем.
 void addBook(vector<Branch>& branches, int& nextId) {
     string title = readLine("Название книги: ");
     string author = readLine("Автор: ");
@@ -82,7 +69,7 @@ void addBook(vector<Branch>& branches, int& nextId) {
         cout << "Некорректный номер.\n";
         return;
     }
-    int index = choice - 1;     // в списке нумерация с 0, а пользователь вводит с 1
+    int index = choice - 1;    
 
     if (branches[index].isFull()) {
         cout << "Филиал \"" << branches[index].getName() << "\" переполнен.\n";
@@ -94,7 +81,6 @@ void addBook(vector<Branch>& branches, int& nextId) {
     nextId++;
 }
 
-// Удалить книгу по id
 void deleteBook(vector<Branch>& branches) {
     showBranches(branches);
     int id = readInt("Введите ID книги для удаления: ");
@@ -108,7 +94,6 @@ void deleteBook(vector<Branch>& branches) {
     branches[branchIndex].removeBookById(id);
 }
 
-// Меню
 void printMenu() {
     cout << "\n========== Сеть библиотек ==========\n";
     cout << "1. Показать филиалы и книги в них\n";
