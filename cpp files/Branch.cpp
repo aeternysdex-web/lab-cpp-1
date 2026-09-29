@@ -7,41 +7,33 @@ Branch::Branch(const string& branchName, int branchCapacity)
     : name(branchName), capacity(branchCapacity) {
 }
 
-// Добавить книгу в филиал
 bool Branch::addBook(const Book& book) {
     if (isFull()) {
-        return false;               // места нет
+        return false;               
     }
-    catalog.push_back(book);        // push_back — добавить в конец списка
+    catalog.push_back(book);     
     return true;
 }
 
-// Удалить книгу по id
 bool Branch::removeBookById(int id) {
-    // size_t — тип для размеров и номеров в vector (целое число без минуса)
-    for (size_t i = 0; i < catalog.size(); ++i) {   // ++i — то же самое, что i++
+    for (size_t i = 0; i < catalog.size(); ++i) {  
         if (catalog[i].getId() == id) {
-            catalog.erase(catalog.begin() + i);     // erase — удалить элемент с номером i
+            catalog.erase(catalog.begin() + i);    
             return true;
         }
     }
-    return false;                   // такой книги нет
+    return false;                   
 }
 
-// Найти книгу по id. Возвращает адрес книги (указатель) или nullptr.
 const Book* Branch::findBookById(int id) const {
-    // Цикл "для каждой книги из каталога":
-    // const Book& book — берём саму книгу (без копии), менять её нельзя.
     for (const Book& book : catalog) {
         if (book.getId() == id) {
-            return &book;           // & перед именем — "взять адрес"
+            return &book;           
         }
     }
     return nullptr;
 }
 
-// Филиал полон, если книг >= вместимости.
-// size() возвращает size_t, а capacity у нас int, поэтому приводим через static_cast<int>.
 bool Branch::isFull() const {
     return static_cast<int>(catalog.size()) >= capacity;
 }
@@ -58,7 +50,6 @@ int Branch::getBooksCount() const {
     return static_cast<int>(catalog.size());
 }
 
-// Показать филиал и все его книги
 void Branch::printCatalog() const {
     cout << "=== Филиал \"" << name << "\" (книг: " << catalog.size()
          << "/" << capacity << ") ===\n";
@@ -70,7 +61,6 @@ void Branch::printCatalog() const {
     }
 }
 
-// Одна строка про филиал
 void Branch::printShort() const {
     cout << name << " (книг: " << catalog.size() << "/" << capacity << ")\n";
 }
