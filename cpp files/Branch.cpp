@@ -3,70 +3,74 @@
 
 using namespace std;
 
-Branch::Branch(string name, int capacity) {
-    this->name = name;
-    this->capacity = capacity;
+Branch::Branch(const string& branchName, int branchCapacity)
+    : name(branchName), capacity(branchCapacity) {
 }
 
-bool Branch::addBook(Book book) {
+// Добавить книгу в филиал
+bool Branch::addBook(const Book& book) {
     if (isFull()) {
-        return false;             
+        return false;               // места нет
     }
-    catalog.push_back(book);       
+    catalog.push_back(book);        // push_back — добавить в конец списка
     return true;
 }
 
+// Удалить книгу по id
 bool Branch::removeBookById(int id) {
-    int count = catalog.size();    
-    for (int i = 0; i < count; i++) {
+    // size_t — тип для размеров и номеров в vector (целое число без минуса)
+    for (size_t i = 0; i < catalog.size(); ++i) {   // ++i — то же самое, что i++
         if (catalog[i].getId() == id) {
-            catalog.erase(catalog.begin() + i);  
+            catalog.erase(catalog.begin() + i);     // erase — удалить элемент с номером i
             return true;
         }
     }
-    return false;                 
+    return false;                   // такой книги нет
 }
 
-Book* Branch::findBookById(int id) {
-    int count = catalog.size();
-    for (int i = 0; i < count; i++) {
-        if (catalog[i].getId() == id) {
-            return &catalog[i];   
+// Найти книгу по id. Возвращает адрес книги (указатель) или nullptr.
+const Book* Branch::findBookById(int id) const {
+    // Цикл "для каждой книги из каталога":
+    // const Book& book — берём саму книгу (без копии), менять её нельзя.
+    for (const Book& book : catalog) {
+        if (book.getId() == id) {
+            return &book;           // & перед именем — "взять адрес"
         }
     }
     return nullptr;
 }
 
-bool Branch::isFull() {
-    int count = catalog.size();
-    return count >= capacity;
+// Филиал полон, если книг >= вместимости.
+// size() возвращает size_t, а capacity у нас int, поэтому приводим через static_cast<int>.
+bool Branch::isFull() const {
+    return static_cast<int>(catalog.size()) >= capacity;
 }
 
-string Branch::getName() {
+string Branch::getName() const {
     return name;
 }
 
-int Branch::getCapacity() {
+int Branch::getCapacity() const {
     return capacity;
 }
 
-int Branch::getBooksCount() {
-    int count = catalog.size();
-    return count;
+int Branch::getBooksCount() const {
+    return static_cast<int>(catalog.size());
 }
 
-void Branch::printCatalog() {
+// Показать филиал и все его книги
+void Branch::printCatalog() const {
     cout << "=== Филиал \"" << name << "\" (книг: " << catalog.size()
-        << "/" << capacity << ") ===\n";
+         << "/" << capacity << ") ===\n";
     if (catalog.empty()) {
         cout << "  В филиале нет книг.\n";
     }
-    int count = catalog.size();
-    for (int i = 0; i < count; i++) {
-        catalog[i].printShort();
+    for (const Book& book : catalog) {
+        book.printShort();
     }
 }
 
-void Branch::printShort() {
+// Одна строка про филиал
+void Branch::printShort() const {
     cout << name << " (книг: " << catalog.size() << "/" << capacity << ")\n";
 }
